@@ -1,13 +1,13 @@
-﻿// Jacob Badali 20290739
-#include "cuda_runtime.h"
-#include "device_launch_parameters.h"
+﻿﻿// Jacob Badali 20290739
+#include <cuda_runtime.h>
+#include <device_launch_parameters.h>
 
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 
 
-#define WIDTH (1500) //CHANGE THIS!!!
+#define WIDTH (100) //CHANGE THIS!!!
 
 #define BLOCK_WIDTH 2 //CHANGE THIS!!!
 
@@ -79,7 +79,7 @@ int main()
         }
     }
 
-    
+
 
     //Cpy to dev, timer
     cudaEventRecord(start, 0);
@@ -97,7 +97,7 @@ int main()
     cudaEventRecord(stop, 0);
     cudaEventSynchronize(stop);
 
-    cudaEventElapsedTime(&elapsedTidme_DevToHost, start, stop);
+    cudaEventElapsedTime(&elapsedTime_DevToHost, start, stop);
     printf("| Transfer Device to Host, size[%d]: %f ms\n", WIDTH, elapsedTime_DevToHost);
 
     printf("\n");
@@ -129,7 +129,7 @@ int main()
 
     cudaEventRecord(start, 0);
 
-    mulKernel << <dimGrid, dimBlock, 0, 0>> > (d_M, d_N, d_P, WIDTH);
+    mulKernel << <dimGrid, dimBlock, 0, 0 >> > (d_M, d_N, d_P, WIDTH);
 
     cudaEventRecord(stop, 0);
     cudaEventSynchronize(stop);
@@ -140,7 +140,7 @@ int main()
     cudaMemcpy(h_M, d_M, size, cudaMemcpyDeviceToHost);
     cudaMemcpy(h_N, d_N, size, cudaMemcpyDeviceToHost);
     cudaEventRecord(stop, 0);
-    cudaEventSynchronize(stop); 
+    cudaEventSynchronize(stop);
 
     cudaMemcpy(h_P, d_P, size, cudaMemcpyDeviceToHost);
 
